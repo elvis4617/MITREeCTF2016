@@ -11,3 +11,4 @@ branches:
       -Individuals
     -Group2
       -Individuals
+  -Release
