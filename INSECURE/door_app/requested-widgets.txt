@@ -1,0 +1,1 @@
+{"device_key": "12345", "flag": "<theflag>", "pin": "123456", "device_id": "8796760371463"}
