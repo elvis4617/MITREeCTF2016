@@ -87,7 +87,7 @@ class ServerConnection(object):
 
                 if 'flag' in d:
                     self.logger.info('Got flag "%s"' % d['flag'])
-
+                print d
                 return d['success']
             except socket.error:
                 self.conn = None
@@ -142,7 +142,7 @@ class Logger(object):
         """
         self.listen_socket.bind(('', Logger.LOGGER_PORT))
         self.listen_socket.listen(1)
-        
+
         while True:
             try:
                 conn, _ = self.listen_socket.accept()
@@ -209,7 +209,7 @@ def main():
 
         while (True):
             """c = avr.read_key()
-            
+
             # read_key() will always return a character. NULL means no new
             # key presses.
             if c == '\0':
@@ -233,7 +233,7 @@ def main():
                 # Otherwise, the # character always terminates the input.
                 if buf in ('*#', '*#*#', '*#*#*#'):
                     continue
-                
+
                 if buf == '*#*#*#*#':
                     if server.register_device():
                         logger.info('Registration successful')
@@ -278,7 +278,7 @@ def main():
                         print "Invalid entry"
                         buf = ""
                         continue
-                    
+
                     master_password = buf[:8]
                     new_password = buf[9:-1]
 

@@ -60,7 +60,7 @@ class DoorServer(protocol.Protocol):
 
         # TODO:  Should verify that the json object has all the fields that we expect :)
 
-        flag = None
+        flagOrError = None
 
         if request["type"] == 'register_device':
             print "Register request (%s)" % repr(request)
@@ -79,7 +79,7 @@ class DoorServer(protocol.Protocol):
 
         if request["type"] == 'open_door':
             print "Open door request (%s)" % repr(request)
-            success, flag = verify_correct_pin(request['device_id'], request['pin'])
+            success, flagOrError = verify_correct_pin(request['device_id'], request['pin'])
 
         elif request["type"] == 'master_change_password':
             print "PIN change request using master PIN (%s)" % repr(request)
@@ -97,7 +97,7 @@ class DoorServer(protocol.Protocol):
             print "Unknown request (%s)" % repr(request)
             success = 0
 
-        self.send_response(success, flag=flag)
+        self.send_response(success, flagOrError=flagOrError)
 
 
     def send_response(self, success, flagOrError=None):
@@ -109,7 +109,9 @@ class DoorServer(protocol.Protocol):
         d = {'success' : success}
         # Add the flag if we have one and if we had success
         if success and flagOrError is not None:
-            d['flag'] = flag
+            d['flag'] = flagOrError
+        elif not success and flagOrError is not None:
+            d['error'] = flagOrError
 
         self.transport.write(json.dumps(d))
 
@@ -160,14 +162,14 @@ def verify_correct_pin(device_id, pin):
         return 0
 
     if verify_attempt_timeout(device_id) is False:
-        # Must wait to attempty again
-        return (0, None)
+        # Must wait to attemptt again
+        return (0, "Exceeded 1 pasword attempt per minute.  Please wait to try again.")
 
 
     if REGISTERED_DEVICES[device_id].pin == pin:
         return (1, REGISTERED_DEVICES[device_id].flag)
     else:
-        return (0, None)
+        return (0, "Invalid pin")
 
 def verify_attempt_timeout(device_id):
     """
