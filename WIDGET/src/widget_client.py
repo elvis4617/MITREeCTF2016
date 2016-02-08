@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import json
 import socket
-#import smbus
+import smbus
 import subprocess
 import time
 import threading
@@ -10,7 +10,6 @@ from uuid import getnode as get_mac
 # This is a (bad) example of the "something you have" portion of the authentication.
 DEVICE_KEY = '12345'
 
-'''
 class AVRChip(object):
     """
     Class for communicating with the AVR on the CryptoCape. The AVR is
@@ -39,8 +38,6 @@ class AVRChip(object):
 
     def led_off(self):
         self.bus.write_byte(AVRChip.AVR_ADDR, 0x03)
-'''
-
 
 class ServerConnection(object):
     """
@@ -48,9 +45,8 @@ class ServerConnection(object):
     attempts to reconnect to the server every 10 seconds if the connection
     fails.
     """
-    #SERVER_ADDR = '192.168.7.1'
-    SERVER_ADDR = 'localhost'#'127.0.0.1'
-    SERVER_PORT = 9500
+    SERVER_ADDR = '192.168.7.1'
+    SERVER_PORT = 5000
 
     def __init__(self, logger):
         self.logger = logger
@@ -197,9 +193,9 @@ def main():
     Main program loop. Sets up the connections to the AVR and the server, then
     reads key presses and sends them to the server.
     """
-    #avr = AVRChip()
-    #avr.reset_keys() # clear the key buffer on the AVR
-    #avr.led_off()
+    avr = AVRChip()
+    avr.reset_keys() # clear the key buffer on the AVR
+    avr.led_off()
     logger = Logger()
 
     try:
@@ -208,7 +204,7 @@ def main():
         buf = ""
 
         while (True):
-            """c = avr.read_key()
+            c = avr.read_key()
             
             # read_key() will always return a character. NULL means no new
             # key presses.
@@ -217,11 +213,9 @@ def main():
                 continue
 
             buf += c
-            """
 
-            print "\n"
-            c = str(raw_input("INPUT KEYPAD VALUE: "))
-            buf += c
+            logger.error('BUFFER:' + str(buf) + '\n')
+            logger.error('BUFFER-SIZE:' + str(len(buf)) + '\n')
 
             # maximum size to avoid running out of memory
             if len(buf) > 16:
@@ -237,27 +231,22 @@ def main():
                 if buf == '*#*#*#*#':
                     if server.register_device():
                         logger.info('Registration successful')
-                        #avr_indicate_success(avr)
-                        print "SUCCESFUL REGISTRATION!!"
+                        avr_indicate_success(avr)
                     else:
                         logger.info('Registration unsuccessful')
-                        #avr_indicate_failure(avr)
-                        print "REGISTRATION FAILED"
+                        avr_indicate_failure(avr)
                 elif len(buf) == 7:
                     password = buf[:6]
 
                     if server.open_door(password):
                         logger.info('Door open successful')
-                        #avr_indicate_success(avr)
-                        print "DOOR OPENED!!"
+                        avr_indicate_success(avr)
                     else:
                         logger.info('Door open unsuccessful')
-                        #avr_indicate_failure(avr)
-                        print "DOOR OPEN UNSUCCESSFUL"
+                        avr_indicate_failure(avr)
                 elif len(buf) == 14:
                     if buf[6] != '*':
                         logger.error('Invalid entry')
-                        print "ENTRY INVALID"
                         buf = ""
                         continue
 
@@ -266,16 +255,13 @@ def main():
 
                     if server.change_password(current_password, new_password):
                         logger.info('Password change successful')
-                        #avr_indicate_success(avr)
-                        print "PASSWORD CHANGE SUCCESSFUL"
+                        avr_indicate_success(avr)
                     else:
                         logger.info('Password change unsuccessful')
-                        #avr_indicate_failure(avr)
-                        print "PASSWORD CHANGE UNSUCCESSFUL"
+                        avr_indicate_failure(avr)
                 elif len(buf) == 16:
                     if buf[8] != '*':
                         logger.error('Invalid entry')
-                        print "Invalid entry"
                         buf = ""
                         continue
                     
@@ -284,12 +270,10 @@ def main():
 
                     if server.change_password_master(master_password, new_password):
                         logger.info('Password change successful')
-                        #avr_indicate_success(avr)
-                        print "PASSWORD CHANGE SUCCESSFUL"
+                        avr_indicate_success(avr)
                     else:
                         logger.info('Password change unsuccessful')
-                        #avr_indicate_failure(avr)
-                        print "PASSWORD CHANGE UNSUCESSFUL"
+                        avr_indicate_failure(avr)
                 else:
                     logger.error('Invalid entry')
 
@@ -301,3 +285,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
