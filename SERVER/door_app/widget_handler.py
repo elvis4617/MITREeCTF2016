@@ -6,6 +6,8 @@ REGISTERED_FILE = os.path.join(ROOTDIR, 'registered-widgets.txt')
 REQUESTED_FILE = os.path.join(ROOTDIR, 'requested-widgets.txt')
 REGISTERED_DEVICES = {}
 PASSWORD_ATTEMPTS = {}
+MASTER_PIN = '12345678'     # TODO: Put this S#!@ somewhere else
+
 
 def setup():
     print "Hello from the other file."
@@ -46,8 +48,7 @@ def handle_request(request):
 
     # Register Request
     if request["type"] == 'register_device':
-        print "Register request (%s)" % repr(request)
-        success, errorMsg, flag = add_reg_request(request['device_key'], request['device_id'])
+        (success, errorMsg, flag) = add_reg_request(request['device_key'], request['device_id'])
         return (success, errorMsg, flag);
 
     else:
@@ -59,15 +60,10 @@ def handle_request(request):
 
 
     if request["type"] == 'open_door':
-        #print "Open door request (%s)" % repr(request)
-        (success, errorMsg, flag) = open_door_request(request)
+        (success, errorMsg, flag) = open_door_req(request)
 
     elif request["type"] == 'master_change_password':
-        print "PIN change request using master PIN (%s)" % repr(request)
-        if request["master_pin"] == MASTER_PIN:
-            success = update_registered(request['device_id'], request['new_pin'])
-        else:
-            success = 0
+        (success, errorMsg) = master_change_password_req(request)
 
     elif request["type"] == 'tenant_change_password':
         print "Tenant PIN change request (%s)" % repr(request)
@@ -98,11 +94,26 @@ def verify_correct_pin(device_id, pin):
         return (0, "Invalid pin")
 
 
-def open_door_request(request):
+def master_change_password_req(request):
+    """
+    Validates change of master
+    """
+    print "PIN change request using master PIN (%s)" % repr(request)
+    if request["master_pin"] == MASTER_PIN:
+        (success, errorMsg) = update_registered(request['device_id'], request['new_pin'])
+        return (success, errorMsg)
+    else:
+        return (0, "Invalid master pin")
+
+
+
+
+def open_door_req(request):
     """
     Validates open door request for a given request object.
     Returns tuple of (success_code, error_msg, flag)
     """
+    print "Open door request (%s)" % repr(request)
     success, msg = verify_correct_pin(request['device_id'], request['pin']);
     if (not success):   # Incorrect pin
         return (success, msg, None)
@@ -133,12 +144,12 @@ def verify_attempt_timeout(device_id):
 def update_registered(device_id,new_pin):
     """"
     Update the registered widget file (and working memory) with new pins.
-    Returns success code (0 or 1).
+    Returns tuple of (success_code, error).
     """
 
     if device_id not in REGISTERED_DEVICES:
         # This device isn't registered
-        return 0
+        return (0, "Device not registered")
 
     # Update memory
     REGISTERED_DEVICES[device_id].pin = new_pin
@@ -148,13 +159,14 @@ def update_registered(device_id,new_pin):
         for (_, device) in REGISTERED_DEVICES.items():
             print >> f, json.dumps(device.__dict__)
 
-    return 1
+    return (1, None)
 
 
 def add_reg_request(device_key, device_id):
     """
     Add registration request to requested-widgets file
     """
+    print "Register request (%s)" % repr(request)
 
     d = {'device_id': device_id,
          'device_key' : device_key,
