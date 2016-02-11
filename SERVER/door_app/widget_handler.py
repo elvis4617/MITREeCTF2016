@@ -7,6 +7,8 @@ REQUESTED_FILE = os.path.join(ROOTDIR, 'requested-widgets.txt')
 REGISTERED_DEVICES = {}
 PASSWORD_ATTEMPTS = {}
 MASTER_PIN = '12345678'     # TODO: Put this S#!@ somewhere else
+DEFAULT_PIN = '123456'
+DEFAULT_FLAG = '<theflag>'
 
 
 def setup():
@@ -25,6 +27,7 @@ def setup():
                 print "Skipping duplicate device ID %s" % repr(new_widget.device_id)
             else:
                 REGISTERED_DEVICES[new_widget.device_id] = new_widget
+
 
 class Widget(object):
     """
@@ -48,16 +51,14 @@ def handle_request(request):
 
     # Register Request
     if request["type"] == 'register_device':
-        (success, errorMsg, flag) = add_reg_request(request['device_key'], request['device_id'])
-        return (success, errorMsg, flag);
+        (success, errorMsg) = add_reg_request(request['device_key'], request['device_id'])
+        return (success, errorMsg, None);
 
-    else:
-        # For all requests other than register_device, we need to verify the device id and key
-        if (request['device_id'] not in REGISTERED_DEVICES or
-            REGISTERED_DEVICES[request['device_id']].device_key != request['device_key']):
-            errorMsg = "Denying request with invalid device_id or invalid device_key"
-            return (0, errorMsg, None)
-
+    # For all requests other than register_device, we need to verify the device id and key
+    if (request['device_id'] not in REGISTERED_DEVICES or
+        REGISTERED_DEVICES[request['device_id']].device_key != request['device_key']):
+        errorMsg = "Denying request with invalid device_id or invalid device_key"
+        return (0, errorMsg, None)
 
     if request["type"] == 'open_door':
         (success, errorMsg, flag) = open_door_req(request)
@@ -66,13 +67,15 @@ def handle_request(request):
         (success, errorMsg) = master_change_password_req(request)
 
     elif request["type"] == 'tenant_change_password':
-        print "Tenant PIN change request (%s)" % repr(request)
-        success,_ = verify_correct_pin(request['device_id'], request['current_pin'])
-        if success:
-            success = update_registered(request['device_id'], request['new_pin'])
+        (success, errorMsg) = tenant_change_password_req(request)
+
     else:
         print "Unknown request (%s)" % repr(request)
         success = 0
+        errorMsg = "Unknown request"
+
+    return (success, errorMsg, flag)
+
 
 def verify_correct_pin(device_id, pin):
     """
@@ -94,9 +97,24 @@ def verify_correct_pin(device_id, pin):
         return (0, "Invalid pin")
 
 
+def tenant_change_password_req(request):
+    """
+    Completes tenant change pin request.
+    Returns tuple of (success_code, error)
+    """
+    print "Tenant PIN change request (%s)" % repr(request)
+    (success, error) = verify_correct_pin(request['device_id'], request['current_pin'])
+    if not success:
+        return (success, error)
+    else:
+        (success, error) = update_registered(request['device_id'], request['new_pin'])
+        return (success, error)
+
+
 def master_change_password_req(request):
     """
-    Validates change of master
+    Validates change of tenant pin using master PIN
+    Returns tuple of (success_code, error_msg)
     """
     print "PIN change request using master PIN (%s)" % repr(request)
     if request["master_pin"] == MASTER_PIN:
@@ -141,6 +159,7 @@ def verify_attempt_timeout(device_id):
             PASSWORD_ATTEMPTS[device_id] = time.time()
             return True
 
+
 def update_registered(device_id,new_pin):
     """"
     Update the registered widget file (and working memory) with new pins.
@@ -176,4 +195,4 @@ def add_reg_request(device_key, device_id):
     with open(REQUESTED_FILE, 'a+') as f:
         print >> f, json.dumps(d)
 
-    return (1, None, None)
+    return (1, None)
