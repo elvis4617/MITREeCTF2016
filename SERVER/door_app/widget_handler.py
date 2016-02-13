@@ -9,6 +9,8 @@ PASSWORD_ATTEMPTS = {}
 MASTER_PIN = '12345678'     # TODO: Put this S#!@ somewhere else
 DEFAULT_PIN = '123456'
 DEFAULT_FLAG = '<theflag>'
+DANGEROUS_DEBUG_MODE = False    # True disables certain security features for debugging !!!TODO: Remove all instances for production!!!
+
 
 
 def setup():
@@ -104,11 +106,11 @@ def tenant_change_password_req(request):
     """
     print "Tenant PIN change request (%s)" % repr(request)
     (success, error) = verify_correct_pin(request['device_id'], request['current_pin'])
-    if not success:
-        return (success, error)
-    else:
+    
+    if success:
         (success, error) = update_registered(request['device_id'], request['new_pin'])
-        return (success, error)
+
+    return (success, error)
 
 
 def master_change_password_req(request):
