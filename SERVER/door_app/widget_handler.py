@@ -1,5 +1,6 @@
 import json
 import os
+import time
 
 ROOTDIR = os.path.dirname(__file__)
 REGISTERED_FILE = os.path.join(ROOTDIR, 'registered-widgets.txt')
@@ -9,7 +10,7 @@ PASSWORD_ATTEMPTS = {}
 MASTER_PIN = '12345678'     # TODO: Put this S#!@ somewhere else
 DEFAULT_PIN = '123456'
 DEFAULT_FLAG = '<theflag>'
-DANGEROUS_DEBUG_MODE = False    # True disables certain security features for debugging !!!TODO: Remove all instances for production!!!
+DANGEROUS_DEBUG_MODE = True    # True disables certain security features for debugging !!!TODO: Remove all instances for production!!!
 
 
 
@@ -106,7 +107,7 @@ def tenant_change_password_req(request):
     """
     print "Tenant PIN change request (%s)" % repr(request)
     (success, error) = verify_correct_pin(request['device_id'], request['current_pin'])
-    
+
     if success:
         (success, error) = update_registered(request['device_id'], request['new_pin'])
 
@@ -187,7 +188,7 @@ def add_reg_request(device_key, device_id):
     """
     Add registration request to requested-widgets file
     """
-    print "Register request (%s)" % repr(request)
+    print "Register request\n"
 
     d = {'device_id': device_id,
          'device_key' : device_key,
