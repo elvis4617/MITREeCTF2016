@@ -45,10 +45,7 @@ class DoorServer(protocol.Protocol):
         self.send_response(success, error, flag)
 
 
-<<<<<<< 8514b7dded03bbb08e74a926152d52190a8d777d
 
-=======
->>>>>>> Fixed send response
     def send_response(self, success, error, flag):
         """
         Send a response back to the Widget device with success value of 0 or 1
