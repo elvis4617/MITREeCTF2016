@@ -1,4 +1,5 @@
-from twisted.internet import reactor, protocol
+from twisted.internet import reactor
+from twisted.internet.protocol import Protocol, Factory
 import json
 import os
 import time
@@ -10,10 +11,13 @@ PORT = 9500
 # computer then you wouldn't need socat.  However, you should make sure that your system is tested with a proxy
 # because it will be necessary for connecting to the live server.
 
+class DoorServerFactory(Factory):
+    def buildProtocol(self, addr):
+        return DoorServer()
 
 
 # TODO: Make this thread-safe and/or figure out what will happen when multiple requests come in simultaneously
-class DoorServer(protocol.Protocol):
+class DoorServer(Protocol):
     """
     Handles incoming requests on TCP port.
     Expect request data to be formatted as a JSON object with:
@@ -70,10 +74,10 @@ def main():
     widget_handler.setup();
 
 
-    factory = protocol.ServerFactory()
-    factory.protocol = DoorServer
+    # factory = protocol.ServerFactory()
+    # factory.protocol = DoorServer
     print "Starting DoorApp server listening on port %d" % PORT
-    reactor.listenTCP(PORT, factory)
+    reactor.listenTCP(PORT, DoorServerFactory())
     reactor.run()
 
 if __name__ == '__main__':
