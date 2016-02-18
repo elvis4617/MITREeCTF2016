@@ -1,0 +1,27 @@
+#!/bin/bash
+#Run this after pulling
+
+#CERT Locations
+CERT = "/etc/ssl/certs/cert.pem"
+KEY = "/etc/ssl/certs/key.pem"
+
+#Generate Certs if they don't exist
+if [ -e $CERT ] && [ -e $KEY ];then
+  echo "Certs already exist"
+else
+  echo "Creating New Certs"
+  openssl req -x509 -newkey rsa:2048 -keyout /etc/ssl/certs/key.pem -out /etc/ssl/certs/cert.pem -days 100
+fi
+
+#Copy new widget_client.py code to correct location
+cp widget_client.py /usr/local/bin
+
+#Give it the correct privileges
+chmod +x /usr/local/bin/widget_client.py
+
+#Reload the Widget
+systemctl daemon-reload
+systemctl enable widget-client.service
+systemctl start widget-client.service
+
+echo "Done updating widget."
