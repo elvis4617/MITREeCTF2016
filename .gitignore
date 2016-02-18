@@ -1,1 +1,3 @@
 *.pyc
+**/registered-widgets.txt
+**/requested-widgets.txt
