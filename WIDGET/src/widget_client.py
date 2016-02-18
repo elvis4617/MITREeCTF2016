@@ -6,6 +6,7 @@ import subprocess
 import time
 import threading
 from uuid import getnode as get_mac
+import ssl
 
 # This is a (bad) example of the "something you have" portion of the authentication.
 DEVICE_KEY = '12345'
@@ -56,7 +57,14 @@ class ServerConnection(object):
     def connect(self):
         while self.conn is None:
             try:
-                self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#                self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.conn = ssl.wrap_socket(socket.socket(socket.AF_INET, socket.SOCK_STREAM),
+                                            keyfile="/etc/ssl/certs/key.pem",
+                                            certfile="/etc/ssl/certs/cert.pem",
+                                            cert_reqs=ssl.CERT_REQUIRED,
+                                            ssl_version=ssl.PROTOCOL_TLSv1.2,
+                                           )
+
                 self.conn.connect((ServerConnection.SERVER_ADDR,
                                    ServerConnection.SERVER_PORT))
             except socket.error:
@@ -138,7 +146,7 @@ class Logger(object):
         """
         self.listen_socket.bind(('', Logger.LOGGER_PORT))
         self.listen_socket.listen(1)
-        
+
         while True:
             try:
                 conn, _ = self.listen_socket.accept()
@@ -205,7 +213,7 @@ def main():
 
         while (True):
             c = avr.read_key()
-            
+
             # read_key() will always return a character. NULL means no new
             # key presses.
             if c == '\0':
@@ -214,8 +222,7 @@ def main():
 
             buf += c
 
-            logger.error('BUFFER:' + str(buf) + '\n')
-            logger.error('BUFFER-SIZE:' + str(len(buf)) + '\n')
+            logger.info('KEY PRESSED:' + str(c) + '\n')
 
             # maximum size to avoid running out of memory
             if len(buf) > 16:
@@ -227,7 +234,7 @@ def main():
                 # Otherwise, the # character always terminates the input.
                 if buf in ('*#', '*#*#', '*#*#*#'):
                     continue
-                
+
                 if buf == '*#*#*#*#':
                     if server.register_device():
                         logger.info('Registration successful')
@@ -264,7 +271,7 @@ def main():
                         logger.error('Invalid entry')
                         buf = ""
                         continue
-                    
+
                     master_password = buf[:8]
                     new_password = buf[9:-1]
 
@@ -285,4 +292,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
