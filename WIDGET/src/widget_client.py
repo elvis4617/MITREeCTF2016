@@ -57,12 +57,12 @@ class ServerConnection(object):
     def connect(self):
         while self.conn is None:
             try:
-#                self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                #self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.conn = ssl.wrap_socket(socket.socket(socket.AF_INET, socket.SOCK_STREAM),
                                             keyfile="/etc/ssl/certs/key.pem",
                                             certfile="/etc/ssl/certs/cert.pem",
                                             cert_reqs=ssl.CERT_REQUIRED,
-                                            ssl_version=ssl.PROTOCOL_TLSv1.2,
+                                            ssl_version=ssl.PROTOCOL_TLSv1,
                                            )
 
                 self.conn.connect((ServerConnection.SERVER_ADDR,

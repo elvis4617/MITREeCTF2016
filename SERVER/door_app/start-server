@@ -8,6 +8,7 @@ if [ -f $CERT -a -f $KEY ];then
   echo "Certs already exist"
 else
   echo "Creating New Certs"
+  mkdir "certs"
   openssl req -x509 -newkey rsa:2048 -days 100 -nodes -subj "/C=US/ST=Massachusetts/L=Amherst/O=UMass/CN=www.umass.edu"\
   -keyout certs/key.pem -out certs/cert.pem
 fi
