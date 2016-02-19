@@ -2,8 +2,8 @@
 #Run this after pulling
 
 #CERT Locations
-CERT = "/etc/ssl/certs/cert.pem"
-KEY = "/etc/ssl/certs/key.pem"
+CERT=/etc/ssl/certs/cert.pem
+KEY=/etc/ssl/certs/key.pem
 
 #Generate Certs if they don't exist
 if [ -e $CERT && -e $KEY ];then
