@@ -1,4 +1,5 @@
-from twisted.internet import reactor
+from OpenSSL import SSL
+from twisted.internet import ssl, reactor
 from twisted.internet.protocol import Protocol, Factory
 import json
 import os
@@ -65,6 +66,11 @@ class DoorServer(Protocol):
 
         self.transport.write(json.dumps(d))
 
+def verifyCallback(connection, x509, errnum, errdepth, ok):
+    if not ok:
+        print 'Invalid Cert from subject:', x509.get_subject()
+        return False
+    return True
 
 def main():
     """
@@ -73,11 +79,23 @@ def main():
     """
     widget_handler.setup();
 
+    # contextFactory = ssl.DefaultOpenSSLContextFactory(
+    #     'keys/server.key', 'keys/server.crt'
+    #     )
+    #
+    # context = contextFactory.getContext(
+    #     SSL.VERIFY_PEER | SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
+    #     verifyCallback
+    #     )
+    #
+    # context.set_verify()
 
     # factory = protocol.ServerFactory()
     # factory.protocol = DoorServer
     print "Starting DoorApp server listening on port %d" % PORT
-    reactor.listenTCP(PORT, DoorServerFactory())
+    reactor.listenSSL(PORT, DoorServerFactory(),
+                      ssl.DefaultOpenSSLContextFactory(
+            'certs/key.pem', 'certs/cert.pem', sslmethod=SSL.TLSv1.2))
     reactor.run()
 
 if __name__ == '__main__':

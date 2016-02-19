@@ -25,4 +25,4 @@ systemctl daemon-reload
 systemctl enable widget-client.service
 systemctl start widget-client.service
 
-echo "Done updating widget."
+echo "Done updating widget"
