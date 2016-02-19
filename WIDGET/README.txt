@@ -11,3 +11,6 @@
 #
 # The Subdirectory HARDWARE_DOCS is for:
 # - Docs and Research for the widget hardware design
+#
+#  To Update Widget:
+#   - sudo bash update

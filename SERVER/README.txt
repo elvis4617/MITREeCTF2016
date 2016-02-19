@@ -7,3 +7,8 @@
 # - Server Source code
 # - Server Docs
 # - Example code for the server
+#
+#
+#  To start the server:
+#   - Be on a Unix System
+#   - sudo bash start-server
