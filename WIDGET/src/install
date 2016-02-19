@@ -6,7 +6,7 @@ CERT=/etc/ssl/certs/cert.pem
 KEY=/etc/ssl/certs/key.pem
 
 #Generate Certs if they don't exist
-if [ -e $CERT && -e $KEY ];then
+if [ -f $CERT && -f $KEY ];then
   echo "Certs already exist"
 else
   echo "Creating New Certs"
