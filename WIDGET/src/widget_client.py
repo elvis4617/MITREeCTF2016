@@ -67,10 +67,10 @@ class ServerConnection(object):
 
                 self.conn.connect((ServerConnection.SERVER_ADDR,
                                    ServerConnection.SERVER_PORT))
-            except socket.error:
+            except socket.error, msg:
                 self.conn = None
                 self.logger.error('Failed to connect to server. Retrying in 10 seconds..')
-                self.logger.error('Error Message:' + str(socket.error))
+                self.logger.error('Error Message:' + msg)
                 time.sleep(10)
 
     def send(self, data_dict):
