@@ -6,7 +6,7 @@ CERT = "/etc/ssl/certs/cert.pem"
 KEY = "/etc/ssl/certs/key.pem"
 
 #Generate Certs if they don't exist
-if [ -e $CERT ] && [ -e $KEY ];then
+if [ -e $CERT && -e $KEY ];then
   echo "Certs already exist"
 else
   echo "Creating New Certs"
@@ -14,7 +14,7 @@ else
 fi
 
 #Copy new widget_client.py code to correct location
-cp widget_client.py /usr/local/bin
+cp ~/MITREeCTF/WIDGET/src/widget_client.py /usr/local/bin
 
 #Give it the correct privileges
 chmod +x /usr/local/bin/widget_client.py
