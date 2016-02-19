@@ -95,7 +95,7 @@ def main():
     print "Starting DoorApp server listening on port %d" % PORT
     reactor.listenSSL(PORT, DoorServerFactory(),
                       ssl.DefaultOpenSSLContextFactory(
-            'certs/key.pem', 'certs/cert.pem', sslmethod=SSL.TLSv1.2))
+            'certs/key.pem', 'certs/cert.pem'))
     reactor.run()
 
 if __name__ == '__main__':
