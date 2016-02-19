@@ -120,6 +120,9 @@ def master_change_password_req(request):
     Returns tuple of (success_code, error_msg)
     """
     print "PIN change request using master PIN (%s)" % repr(request)
+
+    #TODO Check master timeout
+
     if request["master_pin"] == MASTER_PIN:
         (success, errorMsg) = update_registered(request['device_id'], request['new_pin'])
         return (success, errorMsg)
@@ -147,6 +150,7 @@ def verify_attempt_timeout(device_id):
     Verify that the requested device has not tried to guess password
     in last 59 sec.
     """
+
     if DANGEROUS_DEBUG_MODE:
         return True
 

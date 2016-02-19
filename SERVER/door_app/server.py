@@ -66,11 +66,11 @@ class DoorServer(Protocol):
 
         self.transport.write(json.dumps(d))
 
-def verifyCallback(connection, x509, errnum, errdepth, ok):
-    if not ok:
-        print 'Invalid Cert from subject:', x509.get_subject()
-        return False
-    return True
+# def verifyCallback(connection, x509, errnum, errdepth, ok):
+#     if not ok:
+#         print 'Invalid Cert from subject:', x509.get_subject()
+#         return False
+#     return True
 
 def main():
     """
