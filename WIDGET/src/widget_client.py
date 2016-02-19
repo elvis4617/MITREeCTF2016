@@ -61,7 +61,6 @@ class ServerConnection(object):
                 self.conn = ssl.wrap_socket(socket.socket(socket.AF_INET, socket.SOCK_STREAM),
                                             keyfile="/etc/ssl/certs/key.pem",
                                             certfile="/etc/ssl/certs/cert.pem",
-                                            cert_reqs=ssl.CERT_REQUIRED,
                                             ssl_version=ssl.PROTOCOL_TLSv1,
                                            )
 
