@@ -7,7 +7,7 @@ echo -n "Enter Password"
 read -s PASSWORD
 
 #Copy over the files we need to the correct locations
-sshpass -p $PASSWORD scp -r src umass@192.168.7.2:/home/umass
+sshpass -p $PASSWORD scp -r -v src umass@192.168.7.2:/home/umass
 
 #Run any scripts necessary to update the widget
 sshpass -p $PASSWORD ssh -t umass@192.168.7.2 'cd src; sudo bash update'
