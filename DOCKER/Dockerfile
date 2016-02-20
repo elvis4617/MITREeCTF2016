@@ -5,16 +5,16 @@ MAINTAINER Keith Miller
 
 RUN apt-get update
 
-RUN apt-get install -y python python-dev python-pip
+RUN apt-get install -y python python-dev python-pip python-openssl
 
-RUN pip install twisted 
+RUN pip install twisted service_identity
 
-# RUN pip install pyopenssl
+#RUN pip install pyopenssl
 
-ADD /dockCTF /dockCTF
+ADD /door_app /door_app
 
-WORKDIR /dockCTF
+WORKDIR /door_app
 
 EXPOSE 9500
 
-CMD python server.py
+CMD ["bash", "start-server"]
