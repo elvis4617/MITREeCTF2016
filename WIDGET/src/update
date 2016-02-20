@@ -18,7 +18,7 @@ fi
 cp -r . /usr/local/bin
 
 #Give it the correct privileges
-chmod +x /usr/local/bin/widget_client.py
+chmod +x /usr/local/bin/widget_client.py /usr/local/bin/AVRChip.py /usr/local/bin/Logger.py /usr/local/bin/ServerConnection.py
 
 #Reload the Widget
 systemctl daemon-reload
