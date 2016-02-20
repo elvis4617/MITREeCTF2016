@@ -1,6 +1,6 @@
 import Adafruit_GPIO.FT232H as FT232H
  
- print 'Test'
+ print '\nTest\n'
 # Temporarily disable FTDI serial drivers.
 FT232H.use_FT232H()
  
