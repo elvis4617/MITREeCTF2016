@@ -1,3 +1,4 @@
+## Ubuntu Image (Get by calling "docker pull ubuntu")
 FROM ubuntu
 
 MAINTAINER Keith Miller
@@ -10,7 +11,9 @@ RUN pip install twisted
 
 # RUN pip install pyopenssl
 
-RUN python --version
+ADD /dockCTF /dockCTF
+
+WORKDIR /dockCTF
 
 EXPOSE 9500
 
