@@ -1,0 +1,9 @@
+#!/bin/bash
+#Run this script in the WIDGET directory!!! Must be in the WIDGET directory
+#Type in "sudo bash copy-and-update"
+
+#Copy over the files we need to the correct locations
+scp -r src umass@192.168.7.2:/home/umass
+
+#Run any scripts necessary to update the widget
+ssh -t umass@192.168.7.2 'cd src; sudo bash update'

@@ -222,7 +222,7 @@ def main():
 
             buf += c
 
-            logger.info('KEY PRESSED:' + str(c) + '\n')
+            logger.info('KEY PRESSED -- ' + str(c) + '\n')
 
             # maximum size to avoid running out of memory
             if len(buf) > 16:

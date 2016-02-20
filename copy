@@ -1,8 +1,0 @@
-#!/bin/bash
-
-#Use this from the directory the git repo is in!!!!--------------
-#Copys git repo to BBB-------------------------------------------
-sudo scp -r MITREeCTF root@192.168.7.2:/usr
-
-
-
