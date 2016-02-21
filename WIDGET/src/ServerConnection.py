@@ -10,6 +10,8 @@ class ServerConnection(object):
     attempts to reconnect to the server every 10 seconds if the connection
     fails.
     """
+    
+    # Connect to 192.168.7.1:5000
     SERVER_ADDR = '192.168.7.1'
     SERVER_PORT = 5000
 
@@ -19,6 +21,7 @@ class ServerConnection(object):
         self.device_id = str(get_mac())
         self.device_key = device_key
 
+# Connect to the server 
     def connect(self):
         while self.conn is None:
             try:
@@ -64,17 +67,20 @@ class ServerConnection(object):
                 # JSON decoding errors
                 return 0
 
+# Register this widget with the server
     def register_device(self):
         d = {'type' : 'register_device'}
 
         return self.send(d)
 
+# Submit the PIN to the server for entry
     def open_door(self, pin):
         d = {'type' : 'open_door',
              'pin' : pin}
 
         return self.send(d)
 
+# Alter the PIN for this widget
     def change_password(self, current_pin, new_pin):
         d = {'type' : 'tenant_change_password',
              'current_pin' : current_pin,
@@ -82,6 +88,7 @@ class ServerConnection(object):
 
         return self.send(d)
 
+# Change the master password for this widget
     def change_password_master(self, master_pin, new_pin):
         d = {'type' : 'master_change_password',
              'master_pin' : master_pin,
