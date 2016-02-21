@@ -1,13 +1,19 @@
 #!/bin/bash
 
 #connect netcat to debug console of widget app
-nc 192.168.7.2 6000 &
+xterm -e nc 192.168.7.2 6000 -hold &
 
 #run socat to redirect traffic from the widget to the door app
-socat -v tcp-listen:5000,fork tcp-connect:localhost:9500 &
+xterm -e socat -v tcp-listen:5000,fork tcp-connect:localhost:9500 -hold
 
 #get ubunutu stuff for docker
 docker pull ubuntu
 
+#remove old ectf image
+docker rmi ectf
+
 #build ectf image
 docker build -t ectf .
+
+#start container with image
+docker run -t -p 9500:9500 ectf
