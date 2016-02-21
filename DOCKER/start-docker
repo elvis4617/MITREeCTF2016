@@ -6,10 +6,10 @@ sudo docker stop $(sudo docker ps -a -q)
 sudo docker rm $(sudo docker ps -a -q)
 
 #connect netcat to debug console of widget app
-xterm -e nc 192.168.7.2 6000 -hold &
+nc 192.168.7.2 6000 &
 
 #run socat to redirect traffic from the widget to the door app
-xterm -e socat -v tcp-listen:5000,fork tcp-connect:localhost:9500 -hold
+socat -v tcp-listen:5000,fork tcp-connect:localhost:9500 &
 
 #get ubuntu stuff for docker
 docker pull ubuntu
