@@ -37,6 +37,7 @@ class Logger(object):
         self.listen_socket.close()
         self.thread.join()
 
+# Uhhhh what?
     def message(self, msg):
         bad_conns = []
 
