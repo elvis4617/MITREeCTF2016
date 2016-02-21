@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#connect netcat to debug console of widget app
+nc 192.168.7.2 6000 &
+
+#run socat to redirect traffic from the widget to the door app
+socat -v tcp-listen:5000,fork tcp-connect:localhost:9500 &
+
+#get ubunutu stuff for docker
+docker pull ubuntu
+
+#build ectf image
+docker build -t ectf .
