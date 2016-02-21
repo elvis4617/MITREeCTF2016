@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#Stop all docker containers
+echo Stopping and removing all docker containers\n
+sudo docker stop $(sudo docker ps -a -q)
+sudo docker rm $(sudo docker ps -a -q)
+
 #connect netcat to debug console of widget app
 xterm -e nc 192.168.7.2 6000 -hold &
 
