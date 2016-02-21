@@ -1,0 +1,22 @@
+#!/bin/sh
+# Script that runs on startup, should be linked in /etc/init.d
+#
+# Things that need to be on the image
+#
+# - Fail2ban configuration
+# - Limit TCP Inbound and Outbound
+# - Make sure all permissions are correct
+# - Make sure the widget code is in /usr/local/bin and the service running it is in /etc/systemd/system
+#
+# Prevent Console/JTAG Access
+
+# Encrypt I2C Bus
+
+# Generate Random Device ID, and store in TPM
+
+# Generate SSL Keys and store them in TPM
+
+# Lock Chips
+
+# Start Cron Job that Health Checks and Bricks on Fail
+crontab -l | { cat; echo "* * * * * ~/healthcheck.sh"; } | crontab -
