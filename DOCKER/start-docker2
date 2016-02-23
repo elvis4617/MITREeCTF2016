@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#connect netcat to debug console of widget app
+xterm -e 'nc 192.168.7.2 6000' &
+
+#run socat to redirect traffic from the widget to the door app
+xterm -e 'socat -v tcp-listen:5000,fork tcp-connect:localhost:9500' &
+
+#get ubunutu stuff for docker
+#docker pull ubuntu
+
+#build ectf image
+#docker build -t ectf .
+
+
+
+
+########## TEST ##########
+#
+# xterm python &
+#
+# xterm -e bash -c 'echo "Hello"; echo "wtf"; echo "working?"; exec bash' &
+#
+# xterm python &
+#
+##########################
