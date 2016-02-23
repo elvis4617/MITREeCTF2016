@@ -48,6 +48,10 @@ class Widget(object):
 
 
 def handle_request(request):
+    """
+    Request juntion that points each request to its respective function.
+    First checks if the requesting device is registered, and if not rejects non register_device requests.
+    """
     success = 0         # 1 indicates success, 0 indicates failure
     errorMsg = None     # Will be error msg if success = 0
     flag = None         # Will contain flag if required by request and sucess = 1
