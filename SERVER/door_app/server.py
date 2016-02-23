@@ -13,6 +13,9 @@ PORT = 9500
 # because it will be necessary for connecting to the live server.
 
 class DoorServerFactory(Factory):
+    """
+    Builds the DoorServer to be used in handling widget requests.
+    """
     def buildProtocol(self, addr):
         return DoorServer()
 
@@ -32,6 +35,9 @@ class DoorServer(Protocol):
 
     # this function is called whenever we receive new data
     def dataReceived(self, data):
+        """
+        Function that determines if the request is valid, then sends the data to the handler
+        """
         success = 0
         error = None
         flag = None
