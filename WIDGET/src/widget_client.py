@@ -14,7 +14,8 @@ from Logger import Logger
 from ServerConnection import ServerConnection
 
 # This is a (bad) example of the "something you have" portion of the authentication.
-DEVICE_KEY = '12345'
+DEVICE_KEY = '12345' #Default
+
 
 def main():
     """
@@ -25,6 +26,12 @@ def main():
     avr.reset_keys() # clear the key buffer on the AVR
     avr.led_off()
     logger = Logger()
+
+    try:
+        DEVICE_KEY = subprocess.check_output(["tpm_unsealdata", "-i", "/etc/encrypteddevice_id", "-z"])
+    except subprocess.CalledProcessError:
+        DEVICE_KEY = '12345'
+        logger.error('Unable to Reach TPM')
 
     try:
         server = ServerConnection(logger, DEVICE_KEY)
