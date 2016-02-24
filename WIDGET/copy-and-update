@@ -2,12 +2,8 @@
 #Run this script in the WIDGET directory!!! Must be in the WIDGET directory
 #Type in "sudo bash copy-and-update"
 
-#Enter in your password once
-echo -n "Enter Password"
-read -s PASSWORD
-
 #Copy over the files we need to the correct locations
-sshpass -p $PASSWORD scp -r src umass@192.168.7.2:/home/umass
+scp -r src umass@192.168.7.2:/home/umass
 
 #Run any scripts necessary to update the widget
-sshpass -p $PASSWORD ssh -t umass@192.168.7.2 'cd src; sudo bash update'
+ssh -t umass@192.168.7.2 'cd src; sudo bash update'

@@ -2,6 +2,7 @@ from uuid import getnode as get_mac
 import ssl
 import json
 import socket
+import time
 
 
 class ServerConnection(object):
@@ -10,7 +11,7 @@ class ServerConnection(object):
     attempts to reconnect to the server every 10 seconds if the connection
     fails.
     """
-    
+
     # Connect to 192.168.7.1:5000
     SERVER_ADDR = '192.168.7.1'
     SERVER_PORT = 5000
@@ -21,15 +22,16 @@ class ServerConnection(object):
         self.device_id = str(get_mac())
         self.device_key = device_key
 
-# Connect to the server 
+# Connect to the server
     def connect(self):
         while self.conn is None:
             try:
-                #self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 self.conn = ssl.wrap_socket(socket.socket(socket.AF_INET, socket.SOCK_STREAM),
                                             keyfile="/etc/ssl/certs/key.pem",
                                             certfile="/etc/ssl/certs/cert.pem",
-                                            ssl_version=ssl.PROTOCOL_TLSv1,
+                                            cert_reqs=ssl.CERT_REQUIRED,
+                                            ca_certs="/etc/ssl/certs/server_cert.pem",
+                                            server_side=True
                                            )
 
                 self.conn.connect((ServerConnection.SERVER_ADDR,
