@@ -32,7 +32,7 @@ class DoorServer(Protocol):
 
     # this function is called whenever we receive new data
     def dataReceived(self, data):
-        ssuccess = 0
+        success = 0
         error = None
         flag = None
 
