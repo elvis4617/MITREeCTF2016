@@ -5,11 +5,18 @@ import time
 ROOTDIR = os.path.dirname(__file__)
 REGISTERED_FILE = os.path.join(ROOTDIR, 'registered-widgets.txt')
 REQUESTED_FILE = os.path.join(ROOTDIR, 'requested-widgets.txt')
+MASTERKEY_FILE = os.path.join(ROOTDIR, 'keys/masterkey.txt')
 REGISTERED_DEVICES = {}
 PASSWORD_ATTEMPTS = {}
-MASTER_PIN = '12345678'     # TODO: Put this S#!@ somewhere else
 DEFAULT_PIN = '123456'
 DEFAULT_FLAG = '<theflag>'
+MASTER_PIN
+
+#Get master pin
+with open(REGISTERED_FILE, 'r') as f:
+    for line in f:
+        line = line.strip()
+        MASTER_PIN = line
 
 
 def setup():
