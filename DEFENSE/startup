@@ -2,6 +2,7 @@
 # Script that runs on startup, should be linked in /etc/init.d
 #
 #  ---TODO---
+# Things that need to be on the image
 #
 # - Fail2ban configuration
 # - Limit TCP Inbound and Outbound
@@ -15,7 +16,6 @@
 # First Check to see if its the first boot (does first-boot exist?)
 
 date -s "24 FEB 2016 18:00:00"
-
 
 if [ -f /etc/first-boot.txt];then
   touch devide_id.txt
