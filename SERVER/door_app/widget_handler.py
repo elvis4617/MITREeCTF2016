@@ -10,8 +10,6 @@ PASSWORD_ATTEMPTS = {}
 MASTER_PIN = '12345678'     # TODO: Put this S#!@ somewhere else
 DEFAULT_PIN = '123456'
 DEFAULT_FLAG = '<theflag>'
-DANGEROUS_DEBUG_MODE = True    # True disables certain security features for debugging !!!TODO: Remove all instances for production!!!
-
 
 
 def setup():
@@ -154,10 +152,6 @@ def verify_attempt_timeout(device_id):
     Verify that the requested device has not tried to guess password
     in last 59 sec.
     """
-
-    if DANGEROUS_DEBUG_MODE:
-        return True
-
     if device_id not in PASSWORD_ATTEMPTS:
         PASSWORD_ATTEMPTS[device_id] = time.time()
         return True
