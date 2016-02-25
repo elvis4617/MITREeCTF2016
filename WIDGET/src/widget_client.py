@@ -28,10 +28,12 @@ def main():
     logger = Logger()
 
     try:
-        DEVICE_KEY = subprocess.check_output(["tpm_unsealdata", "-i", "/etc/encrypteddevice_id", "-z"])
-    except subprocess.CalledProcessError:
+        with open('/etc/device_key.txt', 'r') as f:
+            for line in f:
+                line = line.strip()
+                DEVICE_KEY = line
+    except IOError:
         DEVICE_KEY = '12345'
-        logger.error('Unable to Reach TPM')
 
     try:
         server = ServerConnection(logger, DEVICE_KEY)
