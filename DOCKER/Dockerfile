@@ -7,6 +7,8 @@ RUN apt-get update
 
 RUN apt-get install -y python python-dev python-pip python-openssl
 
+RUN apt-get -y upgrade
+
 RUN pip install twisted service_identity
 
 #RUN pip install pyopenssl
@@ -17,4 +19,4 @@ WORKDIR /door_app
 
 EXPOSE 9500
 
-CMD ["bash", "start-server"]
+CMD ["python", "server.py"]

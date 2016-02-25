@@ -66,11 +66,11 @@ class DoorServer(Protocol):
 
         self.transport.write(json.dumps(d))
 
-# def verifyCallback(connection, x509, errnum, errdepth, ok):
-#     if not ok:
-#         print 'Invalid Cert from subject:', x509.get_subject()
-#         return False
-#     return True
+def verifyCallback(connection, x509, errnum, errdepth, ok):
+    if not ok:
+        print 'Invalid Cert from subject:', x509.get_subject()
+        return False
+    return True
 
 def main():
     """
@@ -79,23 +79,21 @@ def main():
     """
     widget_handler.setup();
 
-    # contextFactory = ssl.DefaultOpenSSLContextFactory(
-    #     'keys/server.key', 'keys/server.crt'
-    #     )
-    #
-    # context = contextFactory.getContext(
-    #     SSL.VERIFY_PEER | SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
-    #     verifyCallback
-    #     )
-    #
-    # context.set_verify()
+    contextFactory = ssl.DefaultOpenSSLContextFactory(
+        'keys/key.pem', 'keys/cert.pem'
+        )
 
-    # factory = protocol.ServerFactory()
-    # factory.protocol = DoorServer
+    context = contextFactory.getContext()
+
+    context.set_verify(
+        SSL.VERIFY_PEER | SSL.VERIFY_FAIL_IF_NO_PEER_CERT,
+        verifyCallback
+        )
+
+    context.load_verify_locations("keys/widget_cert.pem")
+
     print "Starting DoorApp server listening on port %d" % PORT
-    reactor.listenSSL(PORT, DoorServerFactory(),
-                      ssl.DefaultOpenSSLContextFactory(
-            'certs/key.pem', 'certs/cert.pem'))
+    reactor.listenSSL(PORT, DoorServerFactory(), contextFactory)
     reactor.run()
 
 if __name__ == '__main__':

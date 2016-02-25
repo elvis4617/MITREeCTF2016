@@ -1,22 +1,24 @@
 #!/bin/sh
 # Script that runs on startup, should be linked in /etc/init.d
 #
-# Things that need to be on the image
+#  ---TODO---
 #
 # - Fail2ban configuration
 # - Limit TCP Inbound and Outbound
 # - Make sure all permissions are correct
 # - Make sure the widget code is in /usr/local/bin and the service running it is in /etc/systemd/system
-#
-# Prevent Console/JTAG Access
+# - first-boot.txt should be in /etc/
+# - this should be in /etc/init.d
+# - Make sure this shit works on clea BBB and CC
+# - Take master key out of server.py
+# - JTAG/Console Access
+# First Check to see if its the first boot (does first-boot exist?)
 
-# Encrypt I2C Bus
+if [ -f /etc/first-boot.txt];then
+  touch devide_id.txt
+  echo $RANDOM$RANDOM$RANDOM > /etc/device_id.txt
+  rm /etc/first-boot.txt
+else
 
-# Generate Random Device ID, and store in TPM
-
-# Generate SSL Keys and store them in TPM
-
-# Lock Chips
-
-# Start Cron Job that Health Checks and Bricks on Fail
-crontab -l | { cat; echo "* * * * * ~/healthcheck.sh"; } | crontab -
+fi
+  
