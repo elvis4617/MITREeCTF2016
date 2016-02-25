@@ -5,15 +5,15 @@ import time
 ROOTDIR = os.path.dirname(__file__)
 REGISTERED_FILE = os.path.join(ROOTDIR, 'registered-widgets.txt')
 REQUESTED_FILE = os.path.join(ROOTDIR, 'requested-widgets.txt')
-MASTERKEY_FILE = os.path.join(ROOTDIR, 'keys/masterkey.txt')
+MASTER_PIN_FILE = os.path.join(ROOTDIR, 'keys/masterkey.txt')
 REGISTERED_DEVICES = {}
 PASSWORD_ATTEMPTS = {}
 DEFAULT_PIN = '123456'
 DEFAULT_FLAG = '<theflag>'
-MASTER_PIN
+MASTER_PIN = ''
 
 #Get master pin
-with open(REGISTERED_FILE, 'r') as f:
+with open(MASTER_PIN_FILE, 'r') as f:
     for line in f:
         line = line.strip()
         MASTER_PIN = line
