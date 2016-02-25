@@ -40,7 +40,7 @@ class Widget(object):
     def __init__(self, json_str):
         # Populate object attributes from JSON object
         data = json.loads(json_str)
-        # TODO: Validate JSON
+
         self.device_id = data.get('device_id', None)
         self.pin = data.get('pin', None)
         self.flag = data.get('flag', None)

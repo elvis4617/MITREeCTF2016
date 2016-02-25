@@ -42,19 +42,39 @@ class DoorServer(Protocol):
         error = None
         flag = None
 
+        result = self.validate_request(data)
+        if (result != 1):
+            self.send_response(0, result, None)
+
+        else:
+            request = json.loads(data)
+
+            (success, error, flag) = widget_handler.handle_request(request)
+            self.send_response(success, error, flag)
+
+
+    def validate_request(self, data):
         try:
             request = json.loads(data)
-        except ValueError:
-            # Bad data
-            self.send_response(0)
-            return
+        except ValueError as err:
+            #Bad json
+            return "Invalid json request: " + str(err)
 
-        # TODO:  Should verify that the json object has all the fields that we expect smile emoticon
+        # Verify has fields we expect
+        types = set(("open_door","register_device","master_change_password","tenant_change_password"))
+        keys = request.keys();
 
-        (success, error, flag) = widget_handler.handle_request(request)
+        if "type" not in keys:
+            return "No request type"
+        req_type = request["type"]
+        if (req_type not in types):
+            return "Invalid request type"
 
-        self.send_response(success, error, flag)
-
+        if "device_key" not in keys:
+            return "No device key"
+        if "device_id" not in keys:
+            return "No device id"
+        return 1
 
 
     def send_response(self, success, error, flag):
@@ -103,6 +123,9 @@ def main():
                       ssl.DefaultOpenSSLContextFactory(
             'certs/key.pem', 'certs/cert.pem'))
     reactor.run()
+
+
+
 
 if __name__ == '__main__':
     main()
