@@ -21,4 +21,3 @@ if [ -f /etc/first-boot.txt];then
 else
 
 fi
-  
