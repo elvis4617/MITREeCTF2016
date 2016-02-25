@@ -10,8 +10,6 @@ PASSWORD_ATTEMPTS = {}
 MASTER_PIN = '12345678'     # TODO: Put this S#!@ somewhere else
 DEFAULT_PIN = '123456'
 DEFAULT_FLAG = '<theflag>'
-DANGEROUS_DEBUG_MODE = True    # True disables certain security features for debugging !!!TODO: Remove all instances for production!!!
-
 
 
 def setup():
@@ -40,7 +38,7 @@ class Widget(object):
     def __init__(self, json_str):
         # Populate object attributes from JSON object
         data = json.loads(json_str)
-        # TODO: Validate JSON
+
         self.device_id = data.get('device_id', None)
         self.pin = data.get('pin', None)
         self.flag = data.get('flag', None)
@@ -48,6 +46,10 @@ class Widget(object):
 
 
 def handle_request(request):
+    """
+    Request juntion that points each request to its respective function.
+    First checks if the requesting device is registered, and if not rejects non register_device requests.
+    """
     success = 0         # 1 indicates success, 0 indicates failure
     errorMsg = None     # Will be error msg if success = 0
     flag = None         # Will contain flag if required by request and sucess = 1
@@ -150,10 +152,6 @@ def verify_attempt_timeout(device_id):
     Verify that the requested device has not tried to guess password
     in last 59 sec.
     """
-
-    if DANGEROUS_DEBUG_MODE:
-        return True
-
     if device_id not in PASSWORD_ATTEMPTS:
         PASSWORD_ATTEMPTS[device_id] = time.time()
         return True
