@@ -5,3 +5,4 @@
 **/cert.pem
 **/widget_cert.pem
 **/masterkey.txt
+DOCS/build/*
