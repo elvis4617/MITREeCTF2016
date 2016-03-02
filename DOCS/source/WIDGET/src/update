@@ -1,0 +1,30 @@
+#!/bin/bash
+#Run this after pulling
+
+#CERT Locations
+CERT="/etc/ssl/certs/cert.pem"
+KEY="/etc/ssl/certs/key.pem"
+
+#Generate Certs if they don't exist
+if [ -f $CERT -a -f $KEY ];then
+  echo "Certs already exist"
+else
+  echo "Creating New Certs"
+  openssl req -x509 -newkey rsa:2048 -days 100 -nodes -subj "/C=US/ST=Massachusetts/L=Amherst/O=UMass/CN=www.umass.edu"\
+  -keyout /etc/ssl/certs/key.pem -out /etc/ssl/certs/cert.pem
+fi
+echo "hi there"
+
+#Copy stuff over
+cp -r . /usr/local/bin
+
+#Give it the correct privileges
+chmod +x /usr/local/bin/widget_client.py /usr/local/bin/AVRChip.py /usr/local/bin/Logger.py /usr/local/bin/ServerConnection.py
+
+#Reload the Widget
+systemctl stop widget-client.service
+systemctl daemon-reload
+systemctl enable widget-client.service
+systemctl start widget-client.service
+
+echo "Done updating widget"
