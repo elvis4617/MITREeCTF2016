@@ -4,9 +4,6 @@
 **/key.pem
 **/cert.pem
 **/widget_cert.pem
-<<<<<<< 193ae67e3bade1056e925ad45f0a557c641535ae
 **/masterkey.txt
 DOCS/build/*
-=======
 **/.DS_Store
->>>>>>> Ignored DS_Store (on mac)
