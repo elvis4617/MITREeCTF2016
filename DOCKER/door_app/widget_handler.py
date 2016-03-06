@@ -104,6 +104,7 @@ def verify_correct_pin(device_id, pin):
 
 
     if REGISTERED_DEVICES[device_id].pin == pin:
+        PASSWORD_ATTEMPTS.pop(device.id, None) # Reset lockout after correct attempt
         return (1, None)
     else:
         return (0, "Invalid pin")
